@@ -65,10 +65,8 @@ int main(int argc,char *argv[]){
          exit(4);
       }
       //Ha már vége a játéknak akkor nem kérdést kapunk hanem erről értesítést.
-      if(!strcmp(buffer, "Te nyertél. Gratulálok!\n") || !strcmp(buffer, "Nem te nyertél. Majd legközelebb!\n") || !strcmp(buffer,"Döntetlen.Gratulálok!\n")){
-         printf("%s\n",buffer);
-         close(fd);
-         exit(0);
+      if(!strcmp(buffer,"break")){
+         break;
       }
       //Kérdés kiírása, válasz beolvasása
       printf("%s\n", buffer);
@@ -100,6 +98,12 @@ int main(int argc,char *argv[]){
       }
       printf("%s\n",buffer);
    }
+   rcvsize = recv(fd,buffer,bytes,flags);
+   if(rcvsize < 0){
+      error("%s:Cannot recieve from the socket.\n",argv[0]);
+      exit(4);
+   }
+   printf("%s\n", buffer);
    close(fd);
 }
 

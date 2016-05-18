@@ -308,39 +308,52 @@ int main(int argc,char *argv[]){
 	   				error("%s:Cannot send to the socket.\n", argv[0]);
 	   				exit(5);
 	   			}
+	   			eredmeny1++;
+	   			eredmeny2++;
 	   		}
 
+	   	}
+	   	sprintf(buffer,"break");
+	   	trnmsize = send(fdc, buffer,bytes,flags);
+	   	if(trnmsize < 0){
+	   		error("%s:Cannot send to the socket.\n", argv[0]);
+	   		exit(5);
+	   	}
+	   	trnmsize = send(fdc2, buffer,bytes,flags);
+	   	if(trnmsize < 0){
+	   		error("%s:Cannot send to the socket.\n", argv[0]);
+	   		exit(5);
 	   	}
 
 	   	//Győztes kiválasztása és kliensek értsítése a végkifejletről
 	   	if(eredmeny1 > eredmeny2){
-	   		sprintf(buffer, "Te nyertél. Gratulálok!\n");
+	   		sprintf(buffer, "Te nyertél. Gratulálok!\nPontszámod: %i, Ellenfeledé: %i\n",eredmeny1,eredmeny2);
 	   		trnmsize = send(fdc,buffer,bytes,flags);
 	   		if(trnmsize < 0){
 	   			error("%s:Cannot send to the socket.\n", argv[0]);
 	   			exit(5);
 	   		}
-	   		sprintf(buffer, "Nem te nyertél. Majd legközelebb!\n");
+	   		sprintf(buffer, "Nem te nyertél. Majd legközelebb!\nPontszámod: %i, Ellenfeledé: %i\n",eredmeny2,eredmeny1);
 	   		trnmsize = send(fdc2,buffer,bytes,flags);
 	   		if(trnmsize < 0){
 	   			error("%s:Cannot send to the socket.\n", argv[0]);
 	   			exit(5);
 	   		}
 	   	}else if(eredmeny1 < eredmeny2){
-	   		sprintf(buffer, "Te nyertél. Gratulálok!\n");
+	   		sprintf(buffer, "Te nyertél. Gratulálok!\nPontszámod: %i, Ellenfeledé: %i\n",eredmeny2,eredmeny1);
 	   		trnmsize = send(fdc2,buffer,bytes,flags);
 	   		if(trnmsize < 0){
 	   			error("%s:Cannot send to the socket.\n", argv[0]);
 	   			exit(5);
 	   		}
-	   		sprintf(buffer, "Nem te nyertél. Majd legközelebb!\n");
+	   		sprintf(buffer, "Nem te nyertél. Majd legközelebb!\nPontszámod: %i, Ellenfeledé: %i\n",eredmeny1,eredmeny2);
 	   		trnmsize = send(fdc,buffer,bytes,flags);
 	   		if(trnmsize < 0){
 	   			error("%s:Cannot send to the socket.\n", argv[0]);
 	   			exit(5);
 	   		}
 	   	}else{
-	   		sprintf(buffer, "Döntetlen.Gratulálok!\n");
+	   		sprintf(buffer, "Döntetlen.Gratulálok!\npontszámotok: %i",eredmeny1);
 	   		trnmsize = send(fdc2,buffer,bytes,flags);
 	   		if(trnmsize < 0){
 	   			error("%s:Cannot send to the socket.\n", argv[0]);
