@@ -355,6 +355,7 @@ int main(int argc,char *argv[]){
 	   	}
 
 	   	close(fdc);
+	   	close(fdc2);
 	   	close(fd);
    	}else{
 		printf("1-től 15-ig adjon meg számot.\n");
