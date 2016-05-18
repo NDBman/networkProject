@@ -13,6 +13,7 @@ A játékmenettel kapcsolatos minimális elvárások: A programnak fel kell isme
 ## Fordítás
   - gcc kvzsrv.c -o kvzsrv
   - gcc kvzclnt.c -o kvzclnt
+
 ## Futtatás
   - szerver indítása terminál ablakban **./kvzsrv**
   - első játékos indítása újabb terminál ablakban **./kvzclnt**
