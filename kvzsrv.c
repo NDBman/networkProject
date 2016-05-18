@@ -51,27 +51,31 @@ int main(int argc,char *argv[]){
 
    	if(jatszmaSzam > 0 && jatszmaSzam < 16){
 
+   		//Socket file descriptorának konfigurálása
 	   	fd = socket(AF_INET, SOCK_STREAM, 0);
 	   	if(fd < 0){
 	   		error("%s: Socket creation error\n",argv[0]);
 	      	exit(1);
 	   	}
 
+	   	//Socket opciók beállítása
 	   	setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char*) &on, sizeof on);
 	   	setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (char*) &on, sizeof on);
 
+	   	//Socket hozzárendelése a névtérhez
 	   	err = bind(fd, (struct sockaddr *)&server,server_size);
 	   	if(err < 0){
 	   		error("%s:Cannot bind socket.\n",argv[0]);
 	   		exit(2);
 	   	}
 
+	   	//Várunk a kliens csatlakozására
 	   	err = listen(fd, 10);
 	   	if(err < 0){
 	   		error("%s:Cannot listen to the socket.\n",argv[0]);
 	   		exit(2);
 	   	}
-
+	   	//Elfogadjuk a kliens csatalkozásást
 	   	fdc = accept(fd, (struct sockaddr *)&client, &client_size);
 	   	if(fdc < 0){
 	   		error("%s:Cannot accept the socket.\n", argv[0]);
@@ -98,6 +102,7 @@ int main(int argc,char *argv[]){
 	   	}
 
 	   	for(i = 0;i < jatszmaSzam;i++){
+	   		//Kisorolunk egy sorszámot ami még nem volt az eddigiek során
 	   		volt = 1;
 	   		while(volt){
 	   			volt = 0;
@@ -109,6 +114,7 @@ int main(int argc,char *argv[]){
 	   			}
 	   		}
 	   		voltMar[i] = sorSzam;
+	   		//Kérdés kiválasztása
 	   		switch(sorSzam){
 	   			case 0:
 	   				sprintf(buffer,"Hány oldala van a négyszögnek?");
@@ -172,6 +178,7 @@ int main(int argc,char *argv[]){
 	   				break;
 
 	   		}
+	   		//Elküldjük a kérdést a klienseknek
 	   		trnmsize = send(fdc, buffer,bytes, flags);
 	   		if(trnmsize < 0){
 	   			error("%s:Cannot send to the socket.\n", argv[0]);
@@ -183,13 +190,16 @@ int main(int argc,char *argv[]){
 	   			exit(5);
 	   		}
 
+	   		//Bejön az első klinstőla  válasz
 	   		rcvsize = recv(fdc, buffer,bytes,flags);
 	   		if(rcvsize < 0){
 	   			error("%s:Cannot recieve from the socket.\n",argv[0]);
       			exit(4);
 	   		}
 	   		valasz1 = atoi(buffer);
+	   		//Megnézzük hoyg feladta-e vagy sem
 	   		if(!strcmp(buffer,"feladom")){
+	   			//Feladata->Játékvége
 	   			rcvsize = recv(fdc2, buffer,bytes,flags);
 		   		if(rcvsize < 0){
 		   			error("%s:Cannot recieve from the socket.\n",argv[0]);
@@ -212,6 +222,7 @@ int main(int argc,char *argv[]){
 	   			close(fd);
 	   			exit(0);
 	   		}else{
+	   			//Nem adta fel-> második játékostól is beérkezika  válasz
 	   			rcvsize = recv(fdc2, buffer,bytes,flags);
 		   		if(rcvsize < 0){
 		   			error("%s:Cannot recieve from the socket.\n",argv[0]);
@@ -219,7 +230,9 @@ int main(int argc,char *argv[]){
 		   		}
 		   		
 		   		valasz2= atoi(buffer);
+		   		//megnézzük hoyg ő feladta-e
 		   		if(!strcmp(buffer,"feladom")){
+		   			//Feladta->Játékvége
 		   			sprintf(buffer,"2-es játékos feladta.Te nyertél!\n");
 		   			trnmsize = send(fdc,buffer,bytes,flags );
 		   			if(trnmsize < 0){
@@ -237,6 +250,7 @@ int main(int argc,char *argv[]){
 	   				close(fd);
 	   				exit(0);
 		   		}else{
+		   			//Ha nem adta fel ő sem akkor mindkét kliens kap egy üzenetet arról hyog folytatódhat a játék
 		   			sprintf(buffer,"tovabb");
 		   			trnmsize = send(fdc,buffer,bytes,flags );
 		   			if(trnmsize < 0){
@@ -251,7 +265,7 @@ int main(int argc,char *argv[]){
 		   		}
 	   		}
 
-	   		
+	   		//Válaszok kiértékelése és eredmények kiküldése a 2 kliensnek
 	   		if(abs(valasz - valasz1) < abs(valasz - valasz2)){
 	   			sprintf(buffer,"Te nyerted ezt a  kört\n");
 	   			trnmsize = send(fdc,buffer,bytes,flags);
@@ -298,6 +312,7 @@ int main(int argc,char *argv[]){
 
 	   	}
 
+	   	//Győztes kiválasztása és kliensek értsítése a végkifejletről
 	   	if(eredmeny1 > eredmeny2){
 	   		sprintf(buffer, "Te nyertél. Gratulálok!\n");
 	   		trnmsize = send(fdc,buffer,bytes,flags);
@@ -325,7 +340,7 @@ int main(int argc,char *argv[]){
 	   			exit(5);
 	   		}
 	   	}else{
-	   		sprintf(buffer, "Döntetlen.\n");
+	   		sprintf(buffer, "Döntetlen.Gratulálok!\n");
 	   		trnmsize = send(fdc2,buffer,bytes,flags);
 	   		if(trnmsize < 0){
 	   			error("%s:Cannot send to the socket.\n", argv[0]);

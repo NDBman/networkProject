@@ -50,6 +50,7 @@ int main(int argc,char *argv[]){
       exit(2);
    }
 
+   //megkapjuk az első üzenetet (vagy várakozás vagy indulhat is a játék)
    rcvsize = recv(fd, buffer, bytes, flags);
    if(rcvsize < 0){
       error("%s:Cannot recieve from the socket.\n",argv[0]);
@@ -57,36 +58,41 @@ int main(int argc,char *argv[]){
    }
    printf("%s\n", buffer);
    while(1){
+      //megkapjuk a kérdést
       rcvsize = recv(fd, buffer, bytes, flags);
       if(rcvsize < 0){
          error("%s:Cannot recieve from the socket.\n",argv[0]);
          exit(4);
       }
-
-      if(!strcmp(buffer, "Te nyertél. Gratulálok!\n") || !strcmp(buffer, "Nem te nyertél. Majd legközelebb!\n")){
+      //Ha már vége a játéknak akkor nem kérdést kapunk hanem erről értesítést.
+      if(!strcmp(buffer, "Te nyertél. Gratulálok!\n") || !strcmp(buffer, "Nem te nyertél. Majd legközelebb!\n") || !strcmp(buffer,"Döntetlen.Gratulálok!\n")){
          printf("%s\n",buffer);
          close(fd);
          exit(0);
       }
-
+      //Kérdés kiírása, válasz beolvasása
       printf("%s\n", buffer);
       scanf("%s",buffer);
 
+      //Választ elküldjük
       trnmsize = send(fd, buffer, bytes, flags);
       if(trnmsize < 0){
          error("%s:Cannot recieve from the socket.\n",argv[0]);
          exit(3);
       }
+      //Megkapjuk, hogy feladta-e a másik játékos vagy mehet tovább a játék
       rcvsize = recv(fd, buffer, bytes, flags);
       if(rcvsize < 0){
          error("%s:Cannot recieve from the socket.\n",argv[0]);
          exit(4);
       }
+      //Ha feladta itt kilépünk
       if(strcmp(buffer,"tovabb")){
          printf("%s\n",buffer );
          close(fd);
          exit(0);
       }
+      //Megkapjuk a jelenlegi kör eredményét
       rcvsize = recv(fd, buffer, bytes, flags);
       if(rcvsize < 0){
          error("%s:Cannot recieve from the socket.\n",argv[0]);
