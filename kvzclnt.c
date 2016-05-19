@@ -87,6 +87,12 @@ int main(int argc,char *argv[]){
       //Ha feladta itt kilépünk
       if(strcmp(buffer,"tovabb")){
          printf("%s\n",buffer );
+         sprintf(buffer,"vége");
+         trnmsize = send(fd, buffer, bytes, flags);
+         if(trnmsize < 0){
+            error("%s:Cannot recieve from the socket.\n",argv[0]);
+            exit(3);
+         }
          close(fd);
          exit(0);
       }

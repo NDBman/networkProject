@@ -222,6 +222,16 @@ int main(int argc,char *argv[]){
 	   				error("%s:Cannot send to the socket.\n", argv[0]);
 	   				exit(5);
 	   			}
+	   			rcvsize = recv(fdc, buffer,bytes,flags);
+			   	if(rcvsize < 0){
+			   		error("%s:Cannot recieve from the socket.\n",argv[0]);
+		      		exit(4);
+			   	}
+			   	rcvsize = recv(fdc2, buffer,bytes,flags);
+			   	if(rcvsize < 0){
+			   		error("%s:Cannot recieve from the socket.\n",argv[0]);
+		      		exit(4);
+			   	}
 	   			close(fdc2);
 	   			close(fdc);
 	   			close(fd);
@@ -251,6 +261,16 @@ int main(int argc,char *argv[]){
 	   					error("%s:Cannot send to the socket.\n", argv[0]);
 	   					exit(5);
 	   				}
+	   				rcvsize = recv(fdc, buffer,bytes,flags);
+			   		if(rcvsize < 0){
+			   			error("%s:Cannot recieve from the socket.\n",argv[0]);
+		      			exit(4);
+			   		}
+			   		rcvsize = recv(fdc2, buffer,bytes,flags);
+			   		if(rcvsize < 0){
+			   			error("%s:Cannot recieve from the socket.\n",argv[0]);
+		      			exit(4);
+			   		}
 	   				close(fdc2);
 	   				close(fdc);
 	   				close(fd);
