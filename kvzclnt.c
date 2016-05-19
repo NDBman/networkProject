@@ -104,5 +104,11 @@ int main(int argc,char *argv[]){
       exit(4);
    }
    printf("%s\n", buffer);
+   sprintf(buffer,"vége");
+   trnmsize = send(fd, buffer,bytes,flags);
+   if(trnmsize < 0){
+      error("%s:Cannot send to the socket.\n", argv[0]);
+      exit(5);
+   }
    close(fd);
 }

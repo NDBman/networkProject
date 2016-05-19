@@ -372,6 +372,16 @@ int main(int argc,char *argv[]){
 	   		}
 	   	}
 
+	   	rcvsize = recv(fdc,buffer,bytes,flags);
+	   	if(rcvsize < 0){
+	      	error("%s:Cannot recieve from the socket.\n",argv[0]);
+	     	exit(4);
+	  	}
+		rcvsize = recv(fdc2,buffer,bytes,flags);
+		if(rcvsize < 0){
+		    error("%s:Cannot recieve from the socket.\n",argv[0]);
+		    exit(4);
+		}
 	   	close(fdc);
 	   	close(fdc2);
 	   	close(fd);
