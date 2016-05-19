@@ -36,6 +36,10 @@ int main(int argc,char *argv[]){
    	int eredmeny1, eredmeny2;
    	int volt;
 
+   	if(argc < 2){
+   		printf("Írja be a játszmák számát(1 és 15 között).\n");
+   		exit(0);
+   	}
 	jatszmaSzam = atoi(argv[1]);
 
    	
