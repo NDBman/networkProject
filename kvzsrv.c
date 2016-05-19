@@ -205,6 +205,7 @@ int main(int argc,char *argv[]){
 		   			error("%s:Cannot recieve from the socket.\n",argv[0]);
 	      			exit(4);
 		   		}
+		   		printf("1-es játékos feladta.\n");
 	   			sprintf(buffer,"1-es játékos feladta.Te nyertél!\n");
 	   			trnmsize = send(fdc2,buffer,bytes,flags);
 	   			if(trnmsize < 0){
@@ -234,6 +235,7 @@ int main(int argc,char *argv[]){
 		   		if(!strcmp(buffer,"feladom")){
 		   			//Feladta->Játékvége
 		   			sprintf(buffer,"2-es játékos feladta.Te nyertél!\n");
+		   			printf("2-es játékos feladta.\n");
 		   			trnmsize = send(fdc,buffer,bytes,flags );
 		   			if(trnmsize < 0){
 	   					error("%s:Cannot send to the socket.\n", argv[0]);
@@ -327,6 +329,7 @@ int main(int argc,char *argv[]){
 
 	   	//Győztes kiválasztása és kliensek értsítése a végkifejletről
 	   	if(eredmeny1 > eredmeny2){
+	   		printf("1-es játékos nyert(Pontszáma: %i)\n2-es játékos pontszáma: %i\n",eredmeny1,eredmeny2 );
 	   		sprintf(buffer, "Te nyertél. Gratulálok!\nPontszámod: %i, Ellenfeledé: %i\n",eredmeny1,eredmeny2);
 	   		trnmsize = send(fdc,buffer,bytes,flags);
 	   		if(trnmsize < 0){
@@ -340,6 +343,7 @@ int main(int argc,char *argv[]){
 	   			exit(5);
 	   		}
 	   	}else if(eredmeny1 < eredmeny2){
+	   		printf("2-es játékos nyert(Pontszáma: %i)\n1-es játékos pontszáma: %i\n",eredmeny2,eredmeny1 );
 	   		sprintf(buffer, "Te nyertél. Gratulálok!\nPontszámod: %i, Ellenfeledé: %i\n",eredmeny2,eredmeny1);
 	   		trnmsize = send(fdc2,buffer,bytes,flags);
 	   		if(trnmsize < 0){
@@ -353,6 +357,7 @@ int main(int argc,char *argv[]){
 	   			exit(5);
 	   		}
 	   	}else{
+	   		printf("Döntetlen játék.\nJátékosok által elért pontszám: %i\n",eredmeny1);
 	   		sprintf(buffer, "Döntetlen.Gratulálok!\npontszámotok: %i",eredmeny1);
 	   		trnmsize = send(fdc2,buffer,bytes,flags);
 	   		if(trnmsize < 0){
