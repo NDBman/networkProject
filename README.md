@@ -19,3 +19,5 @@ A játékmenettel kapcsolatos minimális elvárások: A programnak fel kell isme
   - első játékos indítása újabb terminál ablakban **./kvzclnt**
   - második játékos indítása újabb terminál ablakban **./kvzclnt**
 
+## Rendszerkövetelmények
+  - UNIX alapú operációs rendszer (pl. Linux, Mac OS)
