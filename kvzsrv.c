@@ -110,7 +110,7 @@ int main(int argc,char *argv[]){
 	   		volt = 1;
 	   		while(volt){
 	   			volt = 0;
-	   			sorSzam = rand() % 14;
+	   			sorSzam = rand() % 15;
 	   			for(j = 0;j < i;j++){
 	   				if(sorSzam == voltMar[j]){
 	   					volt = 1;
@@ -134,10 +134,10 @@ int main(int argc,char *argv[]){
 	   				break;
 	   			case 3:
 	   				sprintf(buffer,"Hány dalmata van a híres kutyás filmben?");
-	   				valasz=100;
+	   				valasz=101;
 	   				break;
 	   			case 4:
-	   				sprintf(buffer,"Hány kívánságot teljesít a dzsinn");
+	   				sprintf(buffer,"Hány kívánságot teljesít a dzsinn?");
 	   				valasz= 3;
 	   				break;
 	   			case 5:
